@@ -27,6 +27,7 @@ public class UpDownGame
                 Console.WriteLine();
                 Console.WriteLine("정답!");
                 Console.WriteLine($"정답은 {randomNumber}, 남은기회는 {chance - i}");
+                return;
             }
         }
 
