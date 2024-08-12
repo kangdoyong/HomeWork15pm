@@ -1,17 +1,9 @@
 ﻿using System;
+using System.ComponentModel.Design;
+using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Threading.Channels;
-
-// 아이템 이름 입력: 
-// itemname
-// 강화시작 / 강화종료 선택
-// reinforcechoice
-// 0 ~ 1강 성공
-// 강화시작 / 강화종료 선택
-// 1 ~ 2강 성공 
-// ...
-// 4 ~ 5강 성공
-// itemname 강화 더이상할수없음
 
 class ReinforceGame
 { 
@@ -19,28 +11,28 @@ class ReinforceGame
     {
         Name name = new Name();
         name.ItemName();
-        
 
-        ReinforceStatus reinforcestatus = new();
+        ReinforceStart start = new ReinforceStart();
 
-        
-
-        Console.WriteLine("강화시작 / 강화종료 중 하나를 입력");
-        string reinforceinput = Console.ReadLine();
-        if (reinforceinput == "강화시작")
+        while (true)
         {
-            reinforcestatus.reinforceStart();
-            
+            Console.WriteLine("강화시작 / 강화종료 중 하나를 입력");
+            string input = Console.ReadLine();
+            Console.WriteLine();
+            if (input == "강화시작")
+            {
+                start.reinforceStart();
+            }
+            else if (input == "강화종료")
+                break;
+            else
+            {
+                Console.WriteLine("잘못된 입력값입니다. 다시 입력해주세요.");
+            }
         }
-        else if (reinforceinput == "강화종료")
-            reinforcestatus.reinforceEnd();
-        
-
-
-        
+        Console.WriteLine("강화게임 종료");
     }
 }
-
 
 class Name
 {
@@ -48,94 +40,83 @@ class Name
     {
         Console.Write("아이템 이름 입력 : ");
         string itemname = Console.ReadLine();
+        Console.WriteLine();
     }
 }
 
-public class Reinforce
+class Reinforce
 {
     Random random = new Random();
-    
-    public void reinforce01()
-    {
-        int percentage = 90;
-        int randomnumber = random.Next(0,100) + 1;
-        if (randomnumber <= percentage)
-            Console.WriteLine($"0강 -> 1강 강화 성공!");
-    }
-    public void reinforce12()
-    {
-        int percentage = 70;
-        int randomnumber = random.Next(0, 100) + 1;
-        if (randomnumber <= percentage)
-            Console.WriteLine("1강 -> 2강 강화 성공!");
-    }
-    public void reinforce23()
-    {
-        int percentage = 50;
-        int randomnumber = random.Next(0, 100) + 1;
-        if (randomnumber <= percentage)
-            Console.WriteLine("2강 -> 3강 강화 성공!");
-    }
-    public void reinforce34()
-    {
-        int percentage = 30;
-        int randomnumber = random.Next(0, 100) + 1;
-        if (randomnumber <= percentage)
-            Console.WriteLine("3강 -> 4강 강화 성공!");
-    }
-    public void reinforce45()
-    {
-        int percentage = 10;
-        int randomnumber = random.Next(0, 100) + 1;
-        if (randomnumber <= percentage)
-            Console.WriteLine("4강 -> 5강 강화 성공!");
-    }
-}
 
-class ReinforceStatus
-{
-    public void reinforceStart()
+    public bool ReinforceTry(int level)
     {
-        Reinforce reinforce = new();
+        int percentage;
 
-        int num = 0;
-        switch(num)
+        if (level == 0)
+            percentage = 90;
+        else if (level == 1)
+            percentage = 70;
+        else if (level == 2)
+            percentage = 50;
+        else if (level == 3)
+            percentage = 30;
+        else if (level == 4)
+            percentage = 10;
+        else
         {
-            case 1:
-                reinforce.reinforce01();
-                break;
-            case 2:
-                reinforce.reinforce12();
-                break;
-            case 3:
-                reinforce.reinforce23();
-                break;
-            case 4:
-                reinforce.reinforce34();
-                break;
-            case 5:
-                reinforce.reinforce45();
-                break;
+            Console.WriteLine("더 이상 강화를 진행할 수 없습니다.");
+            return false;
         }
 
+        int randomnumber = random.Next(0, 100) + 1;
 
-
-        
+        if (randomnumber <= percentage)
+        {
+            Console.Write($"{level}강 -> {level + 1}강");
+            Console.WriteLine("강화 성공!");
+            return true;
+        }
+        else
+        {
+            Console.Write($"{level}강 -> {level + 1}강");
+            Console.WriteLine("강화 실패!");
+            return false;
+        }
 
     }
-    public void reinforceEnd()
-    {
-    }
-
 }
 
-class ReinforceChoice
+class ReinforceStart
 {
-    public void Choice()
+    private int Level = 0;
+    private int stone = 5;
+    Reinforce reinforce = new();
+    Name name = new();
+
+    public void reinforceStart()
     {
-        Console.WriteLine("강화시작 / 강화종료 중 하나를 입력");
-        string reinforceinput = Console.ReadLine();
+        --stone;
+        if (Level == 5)
+        {
+            Console.WriteLine("최대 강화 단계입니다.");
+            return;
+        }
+        if (stone == 0)
+        {
+            Console.WriteLine("강화석이 모두 소모되었습니다.");
+            return;
+        }
+
+        bool result = reinforce.ReinforceTry(Level);
+        if (result)
+        {
+            Console.WriteLine($"강화성공! 현재 강화단계는 {Level + 1}");
+            ++Level;
+        }
+        else
+        {
+            Console.WriteLine($"강화실패! 현재 강화단계는 {Level}");
+        }
     }
 
-    
 }
