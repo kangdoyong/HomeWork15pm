@@ -17,18 +17,16 @@ public class UpDownGame
 
             if (number < randomNumber) Console.WriteLine("UP!");
             else if (number > randomNumber) Console.WriteLine("DOWN!");
+            else if (i == chance)
+            {
+                Console.WriteLine();
+                Console.WriteLine($"실패! 정답은 {randomNumber}");
+            }
             else
             {
                 Console.WriteLine();
                 Console.WriteLine("정답!");
                 Console.WriteLine($"정답은 {randomNumber}, 남은기회는 {chance - i}");
-                return;
-            }
-
-            if (i == chance)
-            {
-                Console.WriteLine();
-                Console.WriteLine($"실패! 정답은 {randomNumber}");
             }
         }
 
