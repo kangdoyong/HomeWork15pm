@@ -1,74 +1,108 @@
 ﻿using System;
 
+//public class Point
+//{
+//    private float x;
+//    private float y;
+
+//    public Point()
+//    {
+//        x = 0; y = 0;
+//    }
+
+//    public Point(float x, float y)
+//    {
+//        this.x = x;
+//        this.y = y;
+//    }
+
+//    public static bool operator ==(in Point a, in Point b)
+//    {
+//        if (a.x == b.x && a.y == b.y) return true;
+//        return false;
+//    }
+//    public static bool operator !=(in Point a, in Point b)
+//    {
+//        if (a.x == b.x && a.y == b.y) return false;
+//        return true;
+//    }
+
+//    public static Point operator +(in Point a, in Point b)
+//    {
+//        Point result = new Point();
+//        result.x = a.x + b.x;
+//        result.y = a.y + b.y;
+//        return result;
+//    }
+//    public static Point operator -(in Point a, in Point b)
+//    {
+//        Point result = new Point();
+//        result.x = a.x - b.x;
+//        result.y = a.y - b.y;
+//        return result;
+//    }
+//    public static Point operator *(in Point a, in Point b)
+//    {
+//        Point result = new Point();
+//        result.x = a.x * b.x;
+//        result.y = a.y * b.y;
+//        return result;
+//    }
+//    public static Point operator /(in Point a, in Point b)
+//    {
+//        Point result = new Point();
+//        result.x = a.x / b.x;
+//        result.y = a.y / b.y;
+//        return result;
+//    }
+
+//    public override string ToString()
+//    {
+//        string print = $"({x},{y})";
+//        return print;
+//    }
+
+
+//}
+
+
 public class Point
 {
-    private float x;
-    private float y;
+    public double x, y;
 
-    public Point()
-    {
-        x = 0; y = 0;
-    }
-
-    public Point(float x, float y)
+    public Point(double x, double y)
     {
         this.x = x;
         this.y = y;
     }
 
-    public static bool operator==(in Point a, in Point b)
-    {
-        if (a.x == b.x && a.y == b.y) return true;
-        return false;
-    }
-    public static bool operator !=(in Point a, in Point b)
-    {
-        if (a.x == b.x && a.y == b.y) return false;
-        return true;
-    }
+    public override string ToString() => $"({x}, {y})";
 
     public static Point operator +(in Point a, in Point b)
-    {
-        Point result = new Point();
-        result.x = a.x + b.x;
-        result.y = a.y + b.y;
-        return result;
-    }
+        => new Point(a.x + b.x, a.y + b.y);
     public static Point operator -(in Point a, in Point b)
-    {
-        Point result = new Point();
-        result.x = a.x - b.x;
-        result.y = a.y - b.y;
-        return result;
-    }
+        => new Point(a.x - b.x, a.y - b.y);
     public static Point operator *(in Point a, in Point b)
-    {
-        Point result = new Point();
-        result.x = a.x * b.x;
-        result.y = a.y * b.y;
-        return result;
-    }
+        => new Point(a.x * b.x, a.y * b.y);
     public static Point operator /(in Point a, in Point b)
-    {
-        Point result = new Point();
-        result.x = a.x / b.x;
-        result.y = a.y / b.y;
-        return result;
-    }
+        => new Point(a.x / b.x, a.y / b.y);
 
-    public override string ToString()
-    {
-        string print = "";
-        print = $"({x},{y})";
-        return print;
-    }
+    public static bool operator ==(in Point a, in Point b)
+        => (a.x == b.x) && (a.y == b.y);
+    public static bool operator !=(in Point a, in Point b)
+    => (a.x != b.x) || (a.y != b.y);
+
+    public static Point operator ++(in Point a)
+        => new Point(a.x + 1, a.y + 1);
+    public static Point operator --(in Point a)
+        => new Point(a.x - 1, a.y - 1);
 }
 
 class Point형식설계
-{ 
+{
     static void Main()
     {
-        Point point1 = new Point();
+        Point point1 = new Point(0, 0);
         Console.WriteLine(point1); // (0, 0) 출력
 
         Point point2 = new Point(10, 20);
@@ -91,5 +125,10 @@ class Point형식설계
 
         point3 = point1 / point2;
         Console.WriteLine(point3); // (0.1, 0.1) 출력
-    }   
+
+        Point point4 = new Point(0, 0);
+        Console.WriteLine(++point4);
+        Console.WriteLine(point4++);
+        Console.WriteLine(point4);
+    }
 }
