@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -33,26 +33,25 @@ namespace _18_정렬알고리즘
             }
 
             // 요소 출력
-            foreach(int value in myList)
+            foreach (int value in myList)
             {
                 Console.Write($"[{value}] ");
             }
 
-
             // 선택 정렬 진행
-            for (int i = 0;  i < myList.Count - 1; ++i)
+            for (int i = 0; i < myList.Count - 1; ++i)
             {
-                int min = i;
+                int indexpos = i;
                 for (int j = i + 1; j < myList.Count; ++j)
                 {
-                    if (myList[j] < myList[min])
+                    if (myList[j] < myList[indexpos])
                     {
-                        min = j;
+                        indexpos = j;
                     }
                 }
                 int temp = myList[i];
-                myList[i] = myList[min];
-                myList[min] = temp;
+                myList[i] = myList[indexpos];
+                myList[indexpos] = temp;
             }
 
             Console.WriteLine();
