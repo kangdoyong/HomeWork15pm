@@ -1,162 +1,140 @@
-﻿using System;
-using System.Collections.Generic;
+//namespace _18_정렬알고리즘
+//{
+//    internal class _01선택정렬
+//    {
+//        static void Main()
+//        {
+//            List<int> myList = new();
+//            int length = 0;
 
-class 길찾기알고리즘1
+//            bool startSort = false;
+//            while (!startSort)
+//            {
+//                Console.Write("추가할 요소 값 입력(정렬 시작 : \'S\') : ");
+//                string inputString = Console.ReadLine();
+
+//                // 정렬 시작
+//                if (inputString == "S")
+//                {
+//                    startSort = true;
+//                }
+//                // 요소 추가
+//                else
+//                {
+//                    int value = int.Parse(inputString);
+//                    myList.Add(value);
+//                }
+//            }
+
+//            // 요소 출력
+//            foreach (int value in myList)
+//            {
+//                Console.Write($"[{value}] ");
+//            }
+
+//            // 선택 정렬 진행
+//            for (int i = 0; i < myList.Count - 1; ++i)
+//            {
+//                int indexpos = i;
+//                for (int j = i + 1; j < myList.Count; ++j)
+//                {
+//                    if (myList[j] < myList[indexpos])
+//                    {
+//                        indexpos = j;
+//                    }
+//                }
+//                int temp = myList[i];
+//                myList[i] = myList[indexpos];
+//                myList[indexpos] = temp;
+//            }
+
+//            Console.WriteLine();
+//            Console.WriteLine("선택 정렬 진행 완료");
+//            foreach (int value in myList)
+//            {
+//                Console.Write($"[{value}] ");
+//            }
+//        }
+//    }
+//}
+
+namespace _18_정렬알고리즘
 {
-    static void Main(string[] args)
+    internal class _01선택정렬
     {
-        int width = 5, height = 5;
-        char[,] map = 
+        static void Main()
         {
-            {' ', ' ', '▩', ' ', 'D'},
-            {' ', ' ', '▩', ' ', ' '},
-            {' ', ' ', ' ', ' ', ' '},
-            {' ', ' ', ' ', ' ', ' '},
-            {'S', ' ', ' ', ' ', ' '}
-        };
-
-        Point start = new Point(4, 0);
-        Point destination = new Point(0, 4);
-
-        List<Point> path = FindShortestPath(map, start, destination);
-
-        PrintMap(map, path, start, destination);
-    }
-
-    struct Point
-    {
-        public int width, height;
-        public Point(int width, int height)
-        {
-            this.width = width;
-            this.height = height;
-        }
-    }
-
-    class Node
-    {
-        public Point Position { get; set; }
-        public Node Parent { get; set; }
-        public int G { get; set; }
-        public int H { get; set; }
-        public int F => G + H;
-
-        public Node(Point position, Node parent = null)
-        {
-            Position = position;
-            Parent = parent;
-        }
-    }
-
-    static readonly Point[] directions = 
-    {
-        new Point(-1, 0),
-        new Point(1, 0),
-        new Point(0, -1),
-        new Point(0, 1)
-    };
-
-    static List<Point> FindShortestPath(char[,] map, Point start, Point destination)
-    {
-        List<Node> openList = new List<Node>();
-        List<Point> closedList = new List<Point>();
-        Node startNode = new Node(start);
-        openList.Add(startNode);
-
-        while (openList.Count > 0)
-        {
-            Node currentNode = openList[0];
-            foreach (var node in openList)
+            void PrintList(List<int> list)
             {
-                if (node.F < currentNode.F)
-                    currentNode = node;
-            }
-
-            if (currentNode.Position.width == destination.width && currentNode.Position.height == destination.height)
-            {
-                return ReconstructPath(currentNode);
-            }
-
-            openList.Remove(currentNode);
-            closedList.Add(currentNode.Position);
-
-            foreach (var direction in directions)
-            {
-                Point neighborPos = new Point(currentNode.Position.width + direction.width, currentNode.Position.height + direction.height);
-
-                if (neighborPos.width < 0 || neighborPos.width >= map.GetLength(0) ||
-                    neighborPos.height < 0 || neighborPos.height >= map.GetLength(1) ||
-                    map[neighborPos.width, neighborPos.height] == '▩' ||
-                    closedList.Contains(neighborPos))
+                // 요소 출력
+                foreach (int value in list)
                 {
-                    continue;
+                    Console.Write($"[{value}] ");
                 }
+                Console.WriteLine();
+            }
 
-                Node neighborNode = new Node(neighborPos, currentNode);
-                neighborNode.G = currentNode.G + 1;
-                neighborNode.H = Math.Abs(neighborPos.width - destination.width) + Math.Abs(neighborPos.height - destination.height);
-                neighborNode.Parent = currentNode;
+            List<int> myList = new();
+            int length = 0;
 
-                Node existingNode = openList.Find(node => node.Position.width == neighborNode.Position.width && node.Position.height == neighborNode.Position.height);
-                if (existingNode != null)
+            bool startSort = false;
+            while (!startSort)
+            {
+                Console.Write("추가할 요소 값 입력(정렬 시작 : \'S\') : ");
+                string inputString = Console.ReadLine();
+
+                // 정렬 시작
+                if (inputString == "S")
                 {
-                    if (neighborNode.G < existingNode.G)
+                    startSort = true;
+                }
+                // 요소 추가
+                else
+                {
+                    int value = int.Parse(inputString);
+                    myList.Add(value);
+                }
+            }
+
+            Console.WriteLine("정렬 전 요소들 출력.");
+            PrintList(myList);
+
+            // 선택 정렬 진행
+            SelectionSort(myList);
+            Console.WriteLine("정렬 후 요소들 출력.");
+            PrintList(myList);
+        }
+
+        private static void SelectionSort(List<int> list)
+        {
+            void Swap(int index1, int index2)
+            {
+                int temp = list[index1];
+                list[index1] = list[index2];
+                list[index2] = temp;
+            }
+
+            for (int i = 0; i < list.Count - 1; ++i)
+            {
+                int targetIndex = i;
+
+                // 최솟값 탐색
+                for (int j = i + 1; j < list.Count; ++j)
+                {
+                    // 더 작은 값을 찾은 경우
+                    if (list[targetIndex] > list[j])
                     {
-                        existingNode.G = neighborNode.G;
-                        existingNode.Parent = currentNode;
+                        targetIndex = j;
                     }
                 }
-                else
+
+                // 최솟값을 찾은 경우
+                if (i != targetIndex)
                 {
-                    openList.Add(neighborNode);
+                    // 교체합니다.
+                    Swap(targetIndex, i);
                 }
             }
-        }
-        return new List<Point>();
-    }
-
-    static List<Point> ReconstructPath(Node node)
-    {
-        List<Point> path = new List<Point>();
-        while (node != null)
-        {
-            path.Add(node.Position);
-            node = node.Parent;
-        }
-        path.Reverse();
-        return path;
-    }
-
-    static void PrintMap(char[,] map, List<Point> path, Point start, Point destination)
-    {
-        for (int width = 0; width < map.GetLength(0); width++)
-        {
-            for (int height = 0; height < map.GetLength(1); height++)
-            {
-                Point current = new Point(width, height);
-
-                if (current.width == start.width && current.height == start.height)
-                {
-                    Console.Write("[S]");
-                }
-                else if (current.width == destination.width && current.height == destination.height)
-                {
-                    Console.Write("[D]");
-                }
-                else if (map[width, height] == '▩')
-                {
-                    Console.Write("▩ ");
-                }
-                else if (path.Contains(current))
-                {
-                    Console.Write("[■]");
-                }
-                else
-                {
-                    Console.Write("[ ]");
-                }
-            }
-            Console.WriteLine();
         }
     }
 }
